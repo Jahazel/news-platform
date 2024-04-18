@@ -25,6 +25,7 @@ function App() {
               <h3>{item.title}</h3>
               <p>{item.url}</p>
               <p>{item.author}</p>
+              <p>{item.publishedDate}</p>
             </li>
           ))}
         </ul>

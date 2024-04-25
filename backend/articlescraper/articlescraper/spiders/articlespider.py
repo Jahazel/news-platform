@@ -1,6 +1,5 @@
 import scrapy
 
-
 class ArticlespiderSpider(scrapy.Spider):
     name = "articlespider"
     allowed_domains = ["techcrunch.com"]
@@ -12,6 +11,8 @@ class ArticlespiderSpider(scrapy.Spider):
 
         for article in articles:
             yield{
-                "name":article.css(".post-block__header .post-block__title a::text").get(),
-                "author": article.css(".river-byline__authors a::text").get()
+                "title":article.css(".post-block__header .post-block__title a::text").get(),
+                "url": article.css(".post-block__title .post-block__title__link").attrib['href'],
+                "author": article.css(".river-byline__authors a::text").get(),
+                "publishedDate": article.xpath('.//time/@datetime').get()
             }

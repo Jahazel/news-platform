@@ -6,13 +6,19 @@ class ArticlespiderSpider(scrapy.Spider):
     start_urls = ["https://techcrunch.com/"]
 
     def parse(self, response):
-        content = response.css(".content .river.river--homepage div")
-        articles = content.css(".post-block.post-block--image.post-block--unread")
-
+        latest_container = response.css(".wp-block-group.is-layout-flow.wp-block-group-is-layout-flow")
+        articles = latest_container.css(".wp-block-tc23-post-picker")
+        
         for article in articles:
-            yield{
-                "title":article.css(".post-block__header .post-block__title a::text").get(),
-                "url": article.css(".post-block__title .post-block__title__link").attrib['href'],
-                "author": article.css(".river-byline__authors a::text").get(),
-                "publishedDate": article.xpath('.//time/@datetime').get()
-            }
+            url =  article.css("h2 a").attrib['href']
+            yield response.follow(url, self.parse_article, meta={'article_url': url})
+
+    def parse_article(self, response):
+        container = response.css(".wp-block-group")
+        
+        yield{
+            "title": container.css("h1::text").get(),
+            "url": response.meta['article_url'],
+            "author": container.css(".wp-block-tc23-author-card-name a::text").get(),
+            "publishedDate": container.xpath(".//div[contains(@class, 'wp-block-post-date')]/time/@datetime").get()
+        }

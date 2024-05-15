@@ -12,7 +12,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 mongoose
   .connect("mongodb://localhost:27017/articleDB", {})
   .then(() => console.log("connected to MongoDB..."))
-  .catch((err) => console.error("Could not connect to MongoDB..."));
+  .catch((err) => console.error("Could not connect to MongoDB...", err));
 
 app.get("/api/articles", async (req, res) => {
   try {
@@ -20,7 +20,7 @@ app.get("/api/articles", async (req, res) => {
     console.log(`Found ${articles.length} articles`);
     res.json(articles);
   } catch (error) {
-    console.error("Error fetching articles:", error);
+    console.error("Error fetching articles:", error.stack || error);
     res.status(500).send("Server Error");
   }
 });

@@ -9,10 +9,18 @@ function App() {
     axios
       .get("/api/articles")
       .then((response) => {
-        console.log("response" + response);
+        console.log("response", response);
         setArticleList(response.data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        if (error.response) {
+          console.error("Error response:", error.response);
+        } else if (error.request) {
+          console.error("Error request:", error.request);
+        } else {
+          console.error("Error message:", error.message);
+        }
+      });
   }, []);
 
   return (

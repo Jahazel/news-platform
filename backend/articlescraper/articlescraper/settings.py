@@ -60,11 +60,15 @@ ROBOTSTXT_OBEY = True
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
 
+# MongoDB settings
+MONGO_URI = "mongodb://localhost:27017/"
+MONGO_DATABASE = 'articleDB'
+
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "articlescraper.pipelines.ArticlescraperPipeline": 300,
-#}
+ITEM_PIPELINES = {
+   "articlescraper.pipelines.ArticlescraperPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

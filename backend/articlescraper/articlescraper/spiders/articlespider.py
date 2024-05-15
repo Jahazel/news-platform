@@ -1,4 +1,5 @@
 import scrapy
+from articlescraper.items import ArticleItem
 
 class ArticlespiderSpider(scrapy.Spider):
     name = "articlespider"
@@ -15,10 +16,11 @@ class ArticlespiderSpider(scrapy.Spider):
 
     def parse_article(self, response):
         container = response.css(".wp-block-group")
+        article_item = ArticleItem()
         
-        yield{
-            "title": container.css("h1::text").get(),
-            "url": response.meta['article_url'],
-            "author": container.css(".wp-block-tc23-author-card-name a::text").get(),
-            "publishedDate": container.xpath(".//div[contains(@class, 'wp-block-post-date')]/time/@datetime").get()
-        }
+        article_item["title"] = container.css("h1::text").get()
+        article_item["url"] = response.meta['article_url']
+        article_item["author"] = container.css(".wp-block-tc23-author-card-name a::text").get()
+        article_item["publishedDate"] = container.xpath(".//div[contains(@class, 'wp-block-post-date')]/time/@datetime").get()
+
+        yield article_item

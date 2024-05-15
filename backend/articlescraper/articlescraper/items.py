@@ -1,14 +1,7 @@
 import scrapy
 
-class CnnTechArticle(scrapy.Item):
-    # The title of the article
+class ArticleItem(scrapy.Item):
     title = scrapy.Field()
-    
-    # The author of the article
-    author = scrapy.Field()
-    
-    # A brief summary of the article
-    summary = scrapy.Field()
-    
-    # The URL to the full article
     url = scrapy.Field()
+    author = scrapy.Field()
+    publishedDate = scrapy.Field()

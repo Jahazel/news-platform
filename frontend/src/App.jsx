@@ -3,37 +3,33 @@ import "./App.css";
 import axios from "axios";
 
 function App() {
-  const [articleList, setArticleList] = useState([]);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     axios
-      .get("/api/articles")
+      .get("http://localhost:3001/api/articles")
       .then((response) => {
-        console.log("response", response);
-        setArticleList(response.data);
+        setArticles(response.data);
       })
       .catch((error) => {
-        if (error.response) {
-          console.error("Error response:", error.response);
-        } else if (error.request) {
-          console.error("Error request:", error.request);
-        } else {
-          console.error("Error message:", error.message);
-        }
+        console.error("Error fetching articles:", error);
       });
   }, []);
 
   return (
     <>
-      <div>
+      <div className="App">
         <h1>Articles</h1>
         <ul>
-          {articleList.map((item) => (
-            <li key={item._id}>
-              <h3>{item.title}</h3>
-              <p>{item.url}</p>
-              <p>{item.author}</p>
-              <p>{item.publishedDate}</p>
+          {articles.map((article) => (
+            <li key={article._id}>
+              <h2>{article.title}</h2>
+              <p>{article.author}</p>
+              <a href={article.url}>Read more</a>
+              <p>
+                Published on:{" "}
+                {new Date(article.publishedDate).toLocaleDateString()}
+              </p>
             </li>
           ))}
         </ul>

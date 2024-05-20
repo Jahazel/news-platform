@@ -19,17 +19,20 @@ function App() {
   return (
     <>
       <div className="App">
-        <h1>Articles</h1>
+        <h1>The Latest</h1>
         <ul>
           {articles.map((article) => (
             <li key={article._id}>
               <h2>{article.title}</h2>
               <p>{article.author}</p>
-              <a href={article.url}>Read more</a>
+              <a href={article.url} target="_blank">
+                Read more
+              </a>
               <p>
                 Published on:{" "}
                 {new Date(article.publishedDate).toLocaleDateString()}
               </p>
+              <div className="divider"></div>
             </li>
           ))}
         </ul>

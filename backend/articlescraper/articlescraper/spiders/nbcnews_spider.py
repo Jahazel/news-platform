@@ -5,6 +5,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
     name = "nbcnews_spider"
     allowed_domains = ["www.nbcnews.com"]
     start_urls = ["https://www.nbcnews.com/"]
+    processed_urls = set()
 
     section_parsers = {
         'us-news': 'parse_us_news',
@@ -20,7 +21,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         'science': 'parse_science',
         'tech-&-media': 'parse_tech_and_media',
         'weather': 'parse_weather',
-        'video-features': 'parse_video_features',
+        # 'video-features': 'parse_video_features',
         'photos': 'parse_photos',
         'nbc-select': 'parse_nbc_select',
         'nbc-asian-american': 'parse_nbc_asian_america',
@@ -41,16 +42,24 @@ class NbcnewsSpiderSpider(scrapy.Spider):
 
     def parse_section(self, response):
         section_name = response.meta["section_name"]
-        parse_method_name = self.section_parsers.get(section_name, "parse_generic")
-        parse_method = getattr(self, parse_method_name)
-        yield from parse_method(response)
+        
+        if section_name != "parse_video_features":
+            parse_method_name = self.section_parsers.get(section_name, "parse_generic")
+            parse_method = getattr(self, parse_method_name)
+        
+            yield from parse_method(response)
 
     def parse_us_news(self, response):
-        articles = response.css('.multi-up__article')
+        article_list = response.css('.multi-up__article')
         
-        for article in articles:
+        for article in article_list:
             url = article.css("a.tease-card__picture-link").attrib['href']
-            yield response.follow(url, self.parse_article, meta={"url": url})
+            
+            if url and url not in self.processed_urls:
+                self.processed_urls.add(url)
+                full_url = response.urljoin(url)
+
+                yield response.follow(full_url, self.parse_article, meta={"url": full_url})
 
     def parse_generic(self, response):
         articles = response.css('.multi-up__article')
@@ -71,12 +80,3 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_item["publishedDate"] = response.css("time[data-testid='timestamp__datePublished']::attr(datetime)").get()
 
         yield article_item
-
-
-
-
-
-    #     title = scrapy.Field()
-    # url = scrapy.Field()
-    # author = scrapy.Field()
-    # publishedDate = scrapy.Field()

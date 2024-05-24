@@ -22,10 +22,9 @@ class ArticlescraperPipeline(object):
         logging.info("MongoDB connection opened and collection selected.")
 
     def process_item(self, item, spider):
-        try:
-            logging.info(f"Processing item: {item}")
-            self.collection.insert_one(dict(item))
-            logging.info("Item inserted into articles collection.")
-        except Exception as e:
-            logging.error(f"Error inserting item: {item}, error: {e}")
+        self.collection.update_one(
+            {'url': item['url']},  # Assuming 'url' is unique
+            {'$set': item},
+            upsert = True
+        )
         return item

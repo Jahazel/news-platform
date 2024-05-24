@@ -41,7 +41,6 @@ class NbcnewsSpiderSpider(scrapy.Spider):
             section_url = url.css("a").attrib["href"]
             section_name = url.css("span::text").get()
             logging.debug(f"Found section: {section_name}, URL: {section_url}")
-            print("section name type", type(section_name))
 
             if section_name in self.section_parsers:
                 yield response.follow(section_url, self.parse_section, meta={'section_name': section_name})
@@ -51,17 +50,13 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         logging.debug(f"Parsing section: {section_name}")
         
         if section_name and section_name != "parse_video_features":
-            parse_method_name = self.section_parsers.get(section_name)
-            
+            parse_method_name = self.section_parsers.get(section_name)  
             if parse_method_name and isinstance(parse_method_name, str):
                 parse_method = getattr(self, parse_method_name, None)
-            
                 if parse_method:
                     yield from parse_method(response)
-
                 else:
                     logging.warning(f"Method {parse_method_name} not found for section: {section_name}")
-
             else:
                 logging.warning(f"No parse method defined for section: {section_name}")
 
@@ -249,12 +244,14 @@ class NbcnewsSpiderSpider(scrapy.Spider):
 
     def parse_photos(self, response):
         logging.debug("Parsing photos news section")
-        article_list = response.css('.multi-up__article')
+        article_list = response.css(
+        ".pkg.standardLead, .multi-up__article, .multi-up__tease-card--two-up, .multi-up__tease-card--three-up-main, .multi-up__tease-card--three-up, .multi-up__tease-card--four-up"
+    )
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
-            if url and url not in self.processed_urls:
+            if url and url not in self.processed_urls:  
                 self.processed_urls.add(url)
                 full_url = response.urljoin(url)
                 logging.debug(f"Following article URL: {full_url}")

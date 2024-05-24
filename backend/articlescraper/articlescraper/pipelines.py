@@ -23,7 +23,7 @@ class ArticlescraperPipeline(object):
 
     def process_item(self, item, spider):
         self.collection.update_one(
-            {'url': item['url']},  # Assuming 'url' is unique
+            {'url': item['url']},
             {'$set': item},
             upsert = True
         )

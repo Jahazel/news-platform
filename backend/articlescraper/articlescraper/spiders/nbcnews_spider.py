@@ -6,7 +6,9 @@ class NbcnewsSpiderSpider(scrapy.Spider):
     name = "nbcnews_spider"
     allowed_domains = ["www.nbcnews.com"]
     start_urls = ["https://www.nbcnews.com/"]
-    processed_urls = set()
+    
+    def __init__(self):
+        self.processed_urls = set()
 
     section_parsers = {
         'U.S News': 'parse_us_news',
@@ -62,10 +64,11 @@ class NbcnewsSpiderSpider(scrapy.Spider):
 
     def parse_us_news(self, response):
         logging.debug("Parsing US news section")
-        article_list = response.css('.multi-up__article')
+        container = response.css(".package-grid")
+        article_list = container.css(".styles_item__sANtw")
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -74,12 +77,18 @@ class NbcnewsSpiderSpider(scrapy.Spider):
 
                 yield response.follow(full_url, self.parse_article, meta={"url": full_url})
 
+    # def parse_photos(self, response):
+    #     logging.debug("Parsing photos news section")
+    #     article_list = response.css(
+    #     ".pkg.standardLead, .multi-up__article, .multi-up__tease-card--two-up, .multi-up__tease-card--three-up-main, .multi-up__tease-card--three-up, .multi-up__tease-card--four-up"
+    # )
+
     def parse_politics(self, response):
         logging.debug("Parsing politics news section")
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -93,7 +102,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -107,7 +116,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -121,7 +130,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -135,7 +144,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -149,7 +158,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -163,7 +172,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -177,7 +186,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -191,7 +200,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -205,7 +214,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -219,7 +228,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -233,7 +242,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -263,7 +272,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -277,7 +286,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -291,7 +300,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -305,7 +314,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)
@@ -319,7 +328,7 @@ class NbcnewsSpiderSpider(scrapy.Spider):
         article_list = response.css('.multi-up__article')
         
         for article in article_list:
-            url = article.css("a.tease-card__picture-link").attrib['href']
+            url = article.css("a::attr(href)").get()
             
             if url and url not in self.processed_urls:
                 self.processed_urls.add(url)

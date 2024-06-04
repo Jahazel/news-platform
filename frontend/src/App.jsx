@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import ArticleList from "./components/ArticleList";
 import React, { useState } from "react";
 
 function App() {
@@ -17,15 +18,7 @@ function App() {
   return (
     <>
       <Header onSearch={fetchArticles} />
-      <div className="article-list">
-        {articles.map((article, index) => (
-          <div key={index} className="article">
-            <h2>{article.title}</h2>
-            <p>{article.author}</p>
-            <a href={article.url}>Read more</a>
-          </div>
-        ))}
-      </div>
+      <ArticleList articles={articles} />
     </>
   );
 }

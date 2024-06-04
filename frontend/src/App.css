@@ -2,15 +2,25 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  color: #333333;
+}
+
+body {
+  background-color: #f5f5f5;
 }
 
 /* Header */
+
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "Poppins", sans-serif;
-  margin: 2rem 4rem;
+  padding: 1rem 4rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #f5f5f5;
 }
 
 .header-container h1 {
@@ -47,4 +57,24 @@ button {
 .article-list {
   margin-left: 4rem;
   margin-right: 4rem;
+  background-color: #f5f5f5;
+}
+
+.article {
+  /* background-color: #ebebeb; bg-200 for article background */
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.article-title {
+  color: #546167; /* primary-300 for main titles */
+}
+
+.article-author {
+  color: #93a1a8; /* primary-200 for author names */
+}
+
+.article-link {
+  color: #966d25; /* accent-200 for links */
 }

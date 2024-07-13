@@ -1,30 +1,31 @@
+require("dotenv").config();
 const express = require("express");
+const articleRoutes = require("./routes/articles");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const Article = require("./models/Article"); // Import the Article model
 
+//Express app
 const app = express();
 
-app.use(cors());
-app.use(bodyParser.json());
+//Middleware
+app.use(express.json());
 
-mongoose
-  .connect("mongodb://localhost:27017/articleDB", {})
-  .then(() => console.log("MongoDB connected..."))
-  .catch((err) => console.log(err));
-
-app.get("/search", async (req, res) => {
-  try {
-    const query = req.query.q;
-    const articles = await Article.find({
-      title: { $regex: query, $options: "i" },
-    });
-    res.json(articles);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//Routes
+app.use("/api/articles", articleRoutes);
+
+//Connect to DB
+mongoose
+  .connect(process.env.MONG_URI)
+  .then(() => {
+    //Listen for requests
+    app.listen(process.env.PORT, () =>
+      console.log(`Connected to DB and listening on port`, process.env.PORT)
+    );
+  })
+  .catch((error) => {
+    console.log(error);
+  });
